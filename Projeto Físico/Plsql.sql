@@ -55,10 +55,21 @@ BEGIN
     RETURN qtd;
 END;
 
--- GATILHO QUE IMPEDE QUE UM ALUNO COM MATRÍCULA BLOQUEADA REALIZE O EXAME PRÁTICO
+-- /
+-- Bloco anônimo para chamar a função acima
+--DECLARE
+   -- O NUMBER;
+--BEGIN
+    --O:= qtd_tentativas('77665716199', 'pratico');
+    --DBMS_OUTPUT.PUT_LINE('Quantidade de testes praticos: ' || O);
+--END;
+
+--/
+
+-- GATILHO QUE IMPEDE QUE UM ALUNO COM MATRÍCULA BLOQUEADA FAÇA AULAS
 
 CREATE OR REPLACE TRIGGER check_bloqueio_matricula
-BEFORE INSERT OR UPDATE ON Pratico
+BEFORE INSERT OR UPDATE ON DA_AULA
 FOR EACH ROW
 DECLARE
     v_aluno_exists NUMBER;
@@ -70,7 +81,7 @@ BEGIN
     WHERE cpf = :NEW.CPF_aluno AND COD_detran IS NOT NULL;
 
     IF v_aluno_exists > 0 THEN
-        RAISE_APPLICATION_ERROR(-20000, 'Um aluno com matrícula bloqueada não pode realizar o exame prático!!');
+        RAISE_APPLICATION_ERROR(-20000, 'Um aluno com matrícula bloqueada não pode fazer aulas!!');
     END IF;
 END;
 
@@ -101,20 +112,6 @@ CREATE OR REPLACE PROCEDURE cpf_instrutores(CNPJ_autoescola TRABALHA.CNPJ%TYPE) 
             DBMS_OUTPUT.PUT_LINE('Instrutor:' ||reg_cursor.CPF_instrutor);
         END LOOP;
     END;
-
-
-
-
--- /
--- Bloco anônimo para chamar a função acima
---DECLARE
-   -- O NUMBER;
---BEGIN
-    --O:= qtd_tentativas('77665716199', 'pratico');
-    --DBMS_OUTPUT.PUT_LINE('Quantidade de testes praticos: ' || O);
---END;
-
---/
 
 
 

@@ -33,9 +33,9 @@ FROM ALUNO A, INSTRUTOR I, DA_AULA DA
 WHERE A.CPF = DA.CPF_aluno AND I.CPF = DA.CPF_instrutor;
 
 -- JUNÇÃO EXTERNA
--- Listar todas as autoescolas e os instrutores coordenadores, mesmo que não tenham um coordenador atribuído.
+-- Listar todas as os instrutores e as autoescolas que coordenam, mesmo que não coordenem nenhuma autoescola.
 SELECT AUTOESCOLA.nome AS Nome_Autoescola, INSTRUTOR.nome AS Nome_Coordenador
-FROM AUTOESCOLA LEFT JOIN INSTRUTOR ON AUTOESCOLA.CPF_coordenador = INSTRUTOR.CPF;
+FROM AUTOESCOLA RIGHT JOIN INSTRUTOR ON AUTOESCOLA.CPF_coordenador = INSTRUTOR.CPF;
 
 -- SEMI JUNÇÃO
 -- Listar os alunos que fizeram ao menos uma aula.
@@ -63,12 +63,11 @@ WHERE I.salario > (
     FROM INSTRUTOR
 );
 
-
 -- SUBCONSULTA DO TIPO LINHA
--- Encontrar os alunos que têm o mesmo CPF que o instrutor coordenador em qualquer autoescola.
+-- Encontrar o nome da autoescola em que um aluno está matriculado desde que essa matrícula não esteja bloqueada;
 SELECT nome 
-FROM ALUNO
-WHERE CPF IN (SELECT CPF_coordenador FROM AUTOESCOLA);
+FROM AUTOESCOLA
+WHERE CPF = (SELECT CPF_aluno FROM MATRICULA WHERE CPF_aluno = CPF AND COD_detran IS NULL);
 
 -- projetar os nomes dos alunos que  não fizeram o PRATICO
 SELECT A.NOME

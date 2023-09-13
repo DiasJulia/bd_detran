@@ -67,7 +67,7 @@ WHERE I.salario > (
 -- Encontrar o nome da autoescola em que um aluno está matriculado desde que essa matrícula não esteja bloqueada;
 SELECT nome 
 FROM AUTOESCOLA
-WHERE CPF = (SELECT CPF_aluno FROM MATRICULA WHERE CPF_aluno = CPF AND COD_detran IS NULL);
+WHERE CNPJ = (SELECT CNPJ FROM MATRICULA WHERE CPF_aluno = CPF AND COD_detran IS NULL);
 
 -- projetar os nomes dos alunos que  não fizeram o PRATICO
 SELECT A.NOME
